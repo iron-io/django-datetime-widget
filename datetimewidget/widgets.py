@@ -39,15 +39,15 @@ language : '%s',
 """
 
 dateConversion = {
-    'P' : '%p',
+    'PP' : '%p',
     'ss' : '%S',
     'ii' : '%M',
     'hh' : '%H',
     'HH' :  '%I',
     'dd' : '%d',
     'mm' : '%m',
-    #'M' :  '%b',
-    #'MM' : '%B',
+    'M' :  '%b',
+    'MM' : '%B',
     'yy' : '%y',
     'yyyy' : '%Y',
 }
