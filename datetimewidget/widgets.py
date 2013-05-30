@@ -44,9 +44,9 @@ dateConversion = {
     'hh' : '%h',
     'HH' :  '%I',
     'dd' : '%d',
-    'mm' : '%m',
+    'mm' : '%M',
     'M' :  '%b',
-    'MM' : '%M',
+    'MM' : '%m',
     'yy' : '%y',
     'yyyy' : '%Y',
 }
@@ -80,11 +80,11 @@ class DateTimeWidget(MultiWidget):
 
         super(DateTimeWidget, self).__init__(widgets, attrs)
 
-
     def value_from_datadict(self, data, files, name):
         date_time = [
-        widget.value_from_datadict(data, files, name + '_%s' % i)
-        for i, widget in enumerate(self.widgets)]
+            widget.value_from_datadict(data, files, name + '_%s' % i)
+                for i, widget in enumerate(self.widgets)]
+
         try:
             D  = to_current_timezone(datetime.strptime(date_time[0], self.format))
         except ValueError:
