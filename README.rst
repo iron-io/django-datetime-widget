@@ -202,6 +202,21 @@ String. Default: 'bottom-right' (other supported value : 'bottom-left')
 
 This option allows to place the picker just under the input field for the component implementation instead of the default position which is at the bottom right of the button.
 
+* pickerPositionResponsive
+
+String. Default: 'false'
+
+This option detects if the pickerPosition would position the picker outside the viewport. If it does, the pickerPosition
+is adjusted as follows. Use this option to create a responsive datetimepicker that adjusts automatically to screen
+dimensions (e.g. on a mobile device).
+
+if offset.top <= 0: change to pickerPosition from top-* to bottom-*
+if offset.top + picker.heigth > window.height: change pickerPosition from bottom-* to top-*
+if offset.left <= 0: adjust offset.left = 5
+if offset.left >= window.width: adjust offset.left window.width - picker.width - 5
+
+where 5 is the margin from the window border.
+
 * showMeridian
 
 String. Default: 'false'
