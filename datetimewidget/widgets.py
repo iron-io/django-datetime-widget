@@ -36,6 +36,7 @@ datetimepicker_options = """
     todayHighlight : %s,
     minuteStep : %s,
     pickerPosition : '%s',
+    pickerPositionResponsive : %s,
     showMeridian : %s,
     language : '%s',
 """
@@ -76,6 +77,7 @@ class DateTimeWidget(MultiWidget):
         self.option += (options.get('todayHighlight','false'),)
         self.option += (options.get('minuteStep','5'),)
         self.option += (options.get('pickerPosition','bottom-right'),)
+        self.option += (options.get('pickerPositionResponsive', 'false'),)
         self.option += (options.get('showMeridian','false'),)
 
         self.language = options.get('language', 'en')
