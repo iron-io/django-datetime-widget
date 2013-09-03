@@ -5,10 +5,12 @@ django-datetime-widget
 <https://github.com/smalot/bootstrap-datetimepicker>`_.
 
 ``django-datetime-widget`` is perfect when you use an DateTimeField on your model where is necessary to have a specific date time format with a clean input.
+This version has been adjusted to support Bootstrap 3.0 (namely, glyphicons) and adds an option to allow responsive
+positioning of the datetime widget.
 
 Requirements
 ------------
-* `Bootstrap  <http://twitter.github.com/bootstrap/>`_ 2.0.4+
+* `Bootstrap  <http://twitter.github.com/bootstrap/>`_ 3.0.0+
 * `jQuery <http://jquery.com/>`_ 1.7.1+
 
 Screenshots
