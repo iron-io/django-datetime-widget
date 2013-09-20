@@ -121,7 +121,7 @@ class DateTimeWidget(MultiWidget):
         id = uuid.uuid4().hex
         return '<div id="%s"  class="input-append date form_datetime">'\
                '%s'\
-               '<span class="add-on"><i class="icon-th"></i></span>'\
+               '<span class="add-on"><i class="glyphicon glyphicon-th"></i></span>'\
                '</div>'\
                '<script type="text/javascript">'\
                '$("#%s").datetimepicker({%s});'\
