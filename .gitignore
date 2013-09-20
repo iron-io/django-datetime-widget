@@ -1,0 +1,6 @@
+env
+*.pyc
+.project
+.pydev*
+build
+*egg-info

@@ -4,6 +4,7 @@
  * Copyright 2012 Stefan Petre
  * Improvements by Andrew Rowls
  * Improvements by Sébastien Malot
+ * Improvement by Patrick Senti (Bootstrap 3.0, pickerPositionResponsive)
  * Project URL : http://www.malot.fr/bootstrap-datetimepicker
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,8 +44,8 @@
 		this.isInline = false;
 		this.isVisible = false;
 		this.isInput = this.element.is('input');
-		this.component = this.element.is('.date') ? this.element.find('.add-on .icon-th, .add-on .icon-time, .add-on .icon-calendar').parent() : false;
-		this.componentReset = this.element.is('.date') ? this.element.find('.add-on .icon-remove').parent() : false;
+		this.component = this.element.is('.date') ? this.element.find('.add-on .glyphicon-th, .add-on .glyphicon-time, .add-on .glyphicon-calendar').parent() : false;
+		this.componentReset = this.element.is('.date') ? this.element.find('.add-on .glyphicon-remove').parent() : false;
 		this.hasInput = this.component && this.element.find('input').length;
 		if (this.component && this.component.length === 0) {
 			this.component = false;
@@ -55,15 +56,16 @@
 		this.pickerPosition = options.pickerPosition || this.element.data('picker-position') || 'bottom-right';
 				this.showMeridian = options.showMeridian || this.element.data('show-meridian') || false;
 				this.initialDate = options.initialDate || new Date();
-
+                this.pickerPositionResponsive = options.pickerPositionResponsive || false;
+	    this.offset = options.offset || { left: 0, right: 0 };
 		this._attachEvents();
 		
-			this.formatViewType = "datetime";
-			if ('formatViewType' in options) {
-					this.formatViewType = options.formatViewType;
-			} else if ('formatViewType' in this.element.data()) {
-					this.formatViewType = this.element.data('formatViewType');
-			}
+		this.formatViewType = "datetime";
+		if ('formatViewType' in options) {
+				this.formatViewType = options.formatViewType;
+		} else if ('formatViewType' in this.element.data()) {
+				this.formatViewType = this.element.data('formatViewType');
+		}
 
 		this.minView = 0;
 		if ('minView' in options) {
@@ -120,7 +122,7 @@
 		if (this.isRTL){
 			this.picker.addClass('datetimepicker-rtl');
 			this.picker.find('.prev i, .next i')
-						.toggleClass('icon-arrow-left icon-arrow-right');
+						.toggleClass('glyphicon-arrow-left glyphicon-arrow-right');
 		}
 		$(document).on('mousedown', function (e) {
 			// Clicked outside the datetimepicker, hide it
@@ -227,7 +229,7 @@
 		show: function(e) {
 			this.picker.show();
 			this.height = this.component ? this.component.outerHeight() : this.element.outerHeight();
-			if (this.forceParse) {
+                    	if (this.forceParse) {
 				this.update();
 			}
 			this.place();
@@ -372,12 +374,60 @@
 			var zIndex = parseInt(this.element.parents().filter(function() {
 				return $(this).css('z-index') != 'auto';
 			}).first().css('z-index'))+10;
-			var offset, top, left;
-			if (this.component) {
+			var offset, changedPosition = false;
+
+            // calculate position as is
+            offset = this.calcOffset();
+            offset.left += this.offset.left;
+            offset.right += this.offset.right;
+
+            if(this.pickerPositionResponsive) {
+                 /* make sure we stay within viewport boundaries */
+                 /* if necessary, switch pickerPosition from top to bottom and vice versa */
+                var window_height = $(window).height();
+                var window_width = $(window).width();
+                if(offset.top + this.picker.outerHeight() > window_height) {
+                    var pos = $(this.element).position();
+                    //top = pos.top - this.picker.outerHeight();
+                    this.picker.removeClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
+                    this.pickerPosition = this.pickerPosition.replace(/bottom/, 'top')
+                    this.picker.addClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
+                    changedPosition = true;
+                }
+                if (offset.top <= 0) {
+                    this.picker.removeClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
+                    this.pickerPosition = this.pickerPosition.replace(/top/, 'bottom');
+                    this.picker.addClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
+                    changedPosition = true;
+                }
+                if (offset.left + this.picker.outerWidth() >= window_width) {
+                    offset.left = window_width - this.picker.outerWidth - 5;
+                }
+
+                // with the new pickerPosition, recalculate the offset
+                if(changedPosition) {
+                  offset = this.calcOffset();
+                }
+
+                if (offset.left <= 0) {
+                    offset.left = 5;
+                }
+            }
+
+			this.picker.css({
+				top: offset.top,
+				left: offset.left,
+				zIndex: zIndex
+			});
+		},
+		
+        calcOffset: function() {
+        	var offset, left, top;
+       		if (this.component) {
 				offset = this.component.offset();
 				left = offset.left;
 				if (this.pickerPosition == 'bottom-left' || this.pickerPosition == 'top-left') {
-					left += this.component.outerWidth() - this.picker.outerWidth();
+					left += this.component.outerWidth() - this.picker.outerWidth()
 				}
 			} else {
 				offset = this.element.offset();
@@ -388,11 +438,8 @@
 			} else {
 				top = offset.top + this.height;
 			}
-			this.picker.css({
-				top: top,
-				left: left,
-				zIndex: zIndex
-			});
+
+			return({ 'top': top, 'offset': offset, 'left': left });
 		},
 
 		update: function(){
@@ -1442,9 +1489,9 @@
 		},
 		headTemplate: '<thead>'+
 							'<tr>'+
-								'<th class="prev"><i class="icon-arrow-left"/></th>'+
+								'<th class="prev"><i class="glyphicon glyphicon-arrow-left"/></th>'+
 								'<th colspan="5" class="switch"></th>'+
-								'<th class="next"><i class="icon-arrow-right"/></th>'+
+								'<th class="next"><i class="glyphicon glyphicon-arrow-right"/></th>'+
 							'</tr>'+
 						'</thead>',
 		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',

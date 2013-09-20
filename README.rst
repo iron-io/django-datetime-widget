@@ -5,10 +5,12 @@ django-datetime-widget
 <https://github.com/smalot/bootstrap-datetimepicker>`_.
 
 ``django-datetime-widget`` is perfect when you use an DateTimeField on your model where is necessary to have a specific date time format with a clean input.
+This version has been adjusted to support Bootstrap 3.0 (namely, glyphicons) and adds an option to allow responsive
+positioning of the datetime widget.
 
 Requirements
 ------------
-* `Bootstrap  <http://twitter.github.com/bootstrap/>`_ 2.0.4+
+* `Bootstrap  <http://twitter.github.com/bootstrap/>`_ 3.0.0+
 * `jQuery <http://jquery.com/>`_ 1.7.1+
 
 Screenshots
@@ -201,6 +203,21 @@ The increment used to build the hour view. A button is created for each <code>mi
 String. Default: 'bottom-right' (other supported value : 'bottom-left')
 
 This option allows to place the picker just under the input field for the component implementation instead of the default position which is at the bottom right of the button.
+
+* pickerPositionResponsive
+
+String. Default: 'false'
+
+This option detects if the pickerPosition would position the picker outside the viewport. If it does, the pickerPosition
+is adjusted as follows. Use this option to create a responsive datetimepicker that adjusts automatically to screen
+dimensions (e.g. on a mobile device).
+
+if offset.top <= 0: change to pickerPosition from top-* to bottom-*
+if offset.top + picker.heigth > window.height: change pickerPosition from bottom-* to top-*
+if offset.left <= 0: adjust offset.left = 5
+if offset.left >= window.width: adjust offset.left window.width - picker.width - 5
+
+where 5 is the margin from the window border.
 
 * showMeridian
 
