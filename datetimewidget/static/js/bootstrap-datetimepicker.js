@@ -57,15 +57,15 @@
 				this.showMeridian = options.showMeridian || this.element.data('show-meridian') || false;
 				this.initialDate = options.initialDate || new Date();
                 this.pickerPositionResponsive = options.pickerPositionResponsive || false;
-
+	    this.offset = options.offset || { left: 0, right: 0 };
 		this._attachEvents();
 		
-			this.formatViewType = "datetime";
-			if ('formatViewType' in options) {
-					this.formatViewType = options.formatViewType;
-			} else if ('formatViewType' in this.element.data()) {
-					this.formatViewType = this.element.data('formatViewType');
-			}
+		this.formatViewType = "datetime";
+		if ('formatViewType' in options) {
+				this.formatViewType = options.formatViewType;
+		} else if ('formatViewType' in this.element.data()) {
+				this.formatViewType = this.element.data('formatViewType');
+		}
 
 		this.minView = 0;
 		if ('minView' in options) {
@@ -376,68 +376,71 @@
 			}).first().css('z-index'))+10;
 			var offset, changedPosition = false;
 
-                        // calculate position as is
-                        offset = this.calcOffset();
+            // calculate position as is
+            offset = this.calcOffset();
+            offset.left += this.offset.left;
+            offset.right += this.offset.right;
 
-                        if(this.pickerPositionResponsive) {
-                             /* make sure we stay within viewport boundaries */
-                             /* if necessary, switch pickerPosition from top to bottom and vice versa */
-                            var window_height = $(window).height();
-                            var window_width = $(window).width();
-                            if(offset.top + this.picker.outerHeight() > window_height) {
-                                var pos = $(this.element).position();
-                                //top = pos.top - this.picker.outerHeight();
-                                this.picker.removeClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
-                                this.pickerPosition = this.pickerPosition.replace(/bottom/, 'top')
-                                this.picker.addClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
-                                changedPosition = true;
-                            }
-                            if (offset.top <= 0) {
-                                this.picker.removeClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
-                                this.pickerPosition = this.pickerPosition.replace(/top/, 'bottom');
-                                this.picker.addClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
-                                changedPosition = true;
-                            }
-                            if (offset.left + this.picker.outerWidth() >= window_width) {
-                                offset.left = window_width - this.picker.outerWidth - 5;
-                            }
+            if(this.pickerPositionResponsive) {
+                 /* make sure we stay within viewport boundaries */
+                 /* if necessary, switch pickerPosition from top to bottom and vice versa */
+                var window_height = $(window).height();
+                var window_width = $(window).width();
+                if(offset.top + this.picker.outerHeight() > window_height) {
+                    var pos = $(this.element).position();
+                    //top = pos.top - this.picker.outerHeight();
+                    this.picker.removeClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
+                    this.pickerPosition = this.pickerPosition.replace(/bottom/, 'top')
+                    this.picker.addClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
+                    changedPosition = true;
+                }
+                if (offset.top <= 0) {
+                    this.picker.removeClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
+                    this.pickerPosition = this.pickerPosition.replace(/top/, 'bottom');
+                    this.picker.addClass('datetimepicker-dropdown-' + this.pickerPosition + ' dropdown-menu');
+                    changedPosition = true;
+                }
+                if (offset.left + this.picker.outerWidth() >= window_width) {
+                    offset.left = window_width - this.picker.outerWidth - 5;
+                }
 
-                            // with the new pickerPosition, recalculate the offset
-                            if(changedPosition)
-                              offset = this.calcOffset();
+                // with the new pickerPosition, recalculate the offset
+                if(changedPosition) {
+                  offset = this.calcOffset();
+                }
 
-                            if (offset.left <= 0) {
-                                offset.left = 5;
-                            }
-                        }
-                        
+                if (offset.left <= 0) {
+                    offset.left = 5;
+                }
+            }
+
 			this.picker.css({
 				top: offset.top,
 				left: offset.left,
 				zIndex: zIndex
 			});
 		},
-
-                calcOffset: function() {
-                        var offset, left, top;
-                	if (this.component) {
+		
+        calcOffset: function() {
+        	var offset, left, top;
+       		if (this.component) {
 				offset = this.component.offset();
-                                left = offset.left;
+				left = offset.left;
 				if (this.pickerPosition == 'bottom-left' || this.pickerPosition == 'top-left') {
-					left += this.component.outerWidth() - this.picker.outerWidth();
+					left += this.component.outerWidth() - this.picker.outerWidth()
 				}
 			} else {
 				offset = this.element.offset();
-                           	left = offset.left;
-                  	}
+				left = offset.left;
+			}
 			if (this.pickerPosition == 'top-left' || this.pickerPosition == 'top-right') {
 				top = offset.top - this.picker.outerHeight();
 			} else {
 				top = offset.top + this.height;
 			}
 
-                        return({ 'top': top, 'offset': offset, 'left': left });
-                },
+			return({ 'top': top, 'offset': offset, 'left': left });
+		},
 
 		update: function(){
 			var date, fromArgs = false;

@@ -1,4 +1,4 @@
-.gitingore
+.gitignore
 LICENSE.txt
 MANIFEST.in
 README.rst
@@ -50,6 +50,7 @@ datetimewidget/static/js/locales/bootstrap-datetimepicker.tr.js
 datetimewidget/static/js/locales/bootstrap-datetimepicker.uk.js
 datetimewidget/static/js/locales/bootstrap-datetimepicker.zh-CN.js
 datetimewidget/static/js/locales/bootstrap-datetimepicker.zh-TW.js
+dist/django_datetime_widget-0.5.4-py2.7.egg
 django_datetime_widget.egg-info/PKG-INFO
 django_datetime_widget.egg-info/SOURCES.txt
 django_datetime_widget.egg-info/dependency_links.txt

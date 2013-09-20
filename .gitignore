@@ -3,5 +3,4 @@ env
 .project
 .pydev*
 build
-dist
-*egg*
+*egg-info

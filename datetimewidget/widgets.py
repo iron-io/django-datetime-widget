@@ -37,6 +37,7 @@ datetimepicker_options = """
     minuteStep : %s,
     pickerPosition : '%s',
     pickerPositionResponsive : %s,
+    offset: { left: %s, right: %s }, 
     showMeridian : %s,
     language : '%s',
 """
@@ -48,9 +49,9 @@ dateConversion = {
     'hh' : '%H',
     'HH' : '%I',
     'dd' : '%d',
-    'mm' : '%M',
+    'mm' : '%m',
     'M' :  '%b',
-    'MM' : '%m',
+    'MM' : '%B',
     'yy' : '%y',
     'yyyy' : '%Y',
 }
@@ -78,8 +79,9 @@ class DateTimeWidget(MultiWidget):
         self.option += (options.get('minuteStep','5'),)
         self.option += (options.get('pickerPosition','bottom-right'),)
         self.option += (options.get('pickerPositionResponsive', 'false'),)
+        self.option += (options.get('offset', { 'left' : 0 }).get('left', 0),)
+        self.option += (options.get('offset', { 'right': 0 }).get('right', 0),)
         self.option += (options.get('showMeridian','false'),)
-
         self.language = options.get('language', 'en')
         self.option += (self.language,)
 
